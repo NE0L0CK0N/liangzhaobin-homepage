@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>梁兆彬 · 个人主页</title>
+<style>
+  :root {
+    --bg: #090b10;
+    --glass: rgba(12, 15, 21, 0.75);
+    --glass-hover: rgba(16, 20, 27, 0.82);
+    --stroke: rgba(255, 255, 255, 0.08);
+    --stroke-soft: rgba(255, 255, 255, 0.06);
+    --blue: #4c8dff;
+    --blue-deep: #2563eb;
+    --blue-soft: #8ab4ff;
+    --blue-dim: rgba(76, 141, 255, 0.12);
+    --text-main: #eef1f6;
+    --text-sub: #97a1b2;
+    --radius: 20px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body {
+    background:
+      radial-gradient(1300px 700px at 98% -12%, rgba(76, 141, 255, 0.28), transparent 60%),
+      radial-gradient(1350px 680px at -6% 106%, rgba(34, 211, 238, 0.2), transparent 62%),
+      var(--bg);
+    background-attachment: fixed;
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+                 "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    min-height: 100vh;
+  }
+  ::selection { background: rgba(76, 141, 255, 0.35); color: #fff; }
+
+  .container { max-width: 880px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+  /* ===== Hero ===== */
+  .hero {
+    padding: 72px 0 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .hero-info { margin-top: 24px; }
+  .avatar {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-deep) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px; font-weight: 600; color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px var(--stroke),
+                0 12px 32px rgba(0, 0, 0, 0.42),
+                0 0 42px rgba(76, 141, 255, 0.25);
+    overflow: hidden;
+  }
+  .avatar img, .mini-avatar img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+  }
+  .hero-info h1 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .hero-info .tagline {
+    margin-top: 10px;
+    font-size: 17px;
+    color: #b8c2d2;
+  }
+  .hero-info .tagline em {
+    font-style: normal;
+    color: var(--blue-soft);
+  }
+  /* 首屏主行动按钮:引导到数字分身聊天 */
+  .hero-cta { margin-top: 24px; }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 28px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 8px 26px rgba(76, 141, 255, 0.35);
+    transition: filter .2s ease, box-shadow .2s ease, transform .2s ease;
+  }
+  .btn-primary:hover {
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 30px rgba(76, 141, 255, 0.45);
+  }
+  .btn-primary .btn-arrow { transition: transform .2s ease; }
+  .btn-primary:hover .btn-arrow { transform: translateX(3px); }
+
+  .hero-badges { margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  /* 首屏徽章降级为辅助信息:更小、更安静(不影响其他区域的 .badge) */
+  .hero-badges .badge {
+    font-size: 11px;
+    padding: 5px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--stroke-soft);
+    color: var(--text-sub);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .badge {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--blue-dim);
+    border: 1px solid rgba(76, 141, 255, 0.22);
+    color: var(--blue-soft);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* ===== Section ===== */
+  section { padding: 36px 0; }
+  .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #c6cedb;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::before {
+    content: "";
+    width: 18px; height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--blue), transparent);
+    flex-shrink: 0;
+  }
+
+  /* ===== About cards(玻璃卡片) ===== */
+  .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius);
+    padding: 24px 26px;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 34px rgba(0, 0, 0, 0.30);
+    transition: background .25s ease, transform .25s ease, border-color .25s ease;
+  }
+  .card:hover {
+    background: var(--glass-hover);
+    border-color: rgba(76, 141, 255, 0.3);
+    transform: translateY(-2px);
+  }
+  .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text-main); }
+  .card p, .card li { font-size: 14px; color: var(--text-sub); }
+  .card ul { list-style: none; }
+  .card li { padding: 4px 0; display: flex; align-items: center; gap: 9px; }
+  .card li::before {
+    content: "";
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--blue);
+    flex-shrink: 0;
+  }
+  .card-full { grid-column: 1 / -1; }
+  .dot-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .dot-row .badge { font-size: 13px; }
+
+  /* ===== Chat(玻璃容器) ===== */
+  .chat-card {
+    background: var(--glass);
+    border: 1px solid var(--stroke);
+    border-radius: 26px;
+    overflow: hidden;
+    backdrop-filter: blur(36px);
+    -webkit-backdrop-filter: blur(36px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 20px 54px rgba(0, 0, 0, 0.38);
+  }
+  .chat-header {
+    padding: 20px 26px 16px;
+    border-bottom: 1px solid var(--stroke-soft);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .chat-header .mini-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px var(--stroke);
+  }
+  .chat-header .status-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.7);
+  }
+  .chat-header .name { font-size: 15px; font-weight: 600; }
+  .chat-header .sub { font-size: 12px; color: var(--text-sub); display: flex; align-items: center; gap: 6px; }
+
+  .chat-body {
+    height: 380px;
+    overflow-y: auto;
+    padding: 16px 26px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .chat-body::-webkit-scrollbar { width: 5px; }
+  .chat-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 3px; }
+
+  .msg { max-width: 78%; display: flex; flex-direction: column; }
+  .msg .bubble {
+    padding: 11px 17px;
+    border-radius: 20px;
+    font-size: 14px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .msg.bot { align-self: flex-start; }
+  .msg.bot .bubble {
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid var(--stroke-soft);
+    border-bottom-left-radius: 8px;
+    color: var(--text-main);
+  }
+  .msg.user { align-self: flex-end; align-items: flex-end; }
+  .msg.user .bubble {
+    background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+    box-shadow: 0 6px 18px rgba(76, 141, 255, 0.25);
+    border-bottom-right-radius: 8px;
+    color: #fff;
+  }
+  .msg .time { font-size: 11px; color: var(--text-sub); margin-top: 5px; padding: 0 4px; }
+
+  .typing { display: flex; gap: 4px; padding: 3px 1px; }
+  .typing span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--blue-soft);
+    animation: blink 1.2s infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: .2s; }
+  .typing span:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%, 60%, 100% { opacity: .25; } 30% { opacity: 1; } }
+
+  .quick-questions {
+    padding: 12px 26px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .quick-questions button {
+    font-size: 13px;
+    padding: 8px 15px;
+    border-radius: 999px;
+    background: var(--blue-dim);
+    color: var(--blue-soft);
+    border: 1px solid rgba(76, 141, 255, 0.18);
+    cursor: pointer;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    font-family: inherit;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .quick-questions button:hover {
+    background: rgba(76, 141, 255, 0.22);
+    border-color: rgba(76, 141, 255, 0.4);
+  }
+
+  .chat-input-area {
+    display: flex;
+    gap: 10px;
+    padding: 20px 26px 22px;
+    border-top: 1px solid var(--stroke-soft);
+  }
+  .chat-input-area input {
+    flex: 1;
+    background: rgba(9, 11, 16, 0.4);
+    border: 1px solid var(--stroke);
+    border-radius: 999px;
+    padding: 12px 20px;
+    color: var(--text-main);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+  }
+  .chat-input-area input:focus {
+    border-color: rgba(76, 141, 255, 0.55);
+    background: rgba(76, 141, 255, 0.06);
+    box-shadow: 0 0 0 3px rgba(76, 141, 255, 0.15);
+  }
+  .chat-input-area input::placeholder { color: #6b7684; }
+  .chat-input-area button {
+    background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 0 24px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(76, 141, 255, 0.28);
+    transition: filter .2s ease, box-shadow .2s ease;
+    font-family: inherit;
+  }
+  .chat-input-area button:hover {
+    filter: brightness(1.12);
+    box-shadow: 0 8px 24px rgba(76, 141, 255, 0.4);
+  }
+
+  /* ===== Works ===== */
+  .works-note { margin-top: 16px; font-size: 13px; color: var(--text-sub); }
+
+  /* ===== Contact ===== */
+  .contact-list { display: flex; flex-direction: column; }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding: 14px 2px;
+  }
+  .contact-item + .contact-item { border-top: 1px solid var(--stroke-soft); }
+  .contact-item:first-child { padding-top: 2px; }
+  .contact-item:last-child { padding-bottom: 2px; }
+  .contact-label { font-size: 13px; color: var(--text-sub); margin-bottom: 4px; }
+  .contact-value { font-size: 15px; font-weight: 500; color: var(--text-main); }
+  .btn-sm { padding: 9px 18px; font-size: 13px; }
+
+  /* ===== Footer ===== */
+  footer {
+    padding: 40px 0 56px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-sub);
+    margin-top: 32px;
+  }
+
+  /* ===== Mobile ===== */
+  @media (max-width: 640px) {
+    .hero { padding: 48px 0 32px; }
+    .hero-info { margin-top: 20px; }
+    .avatar { width: 96px; height: 96px; }
+    .hero-info h1 { font-size: 30px; }
+    .hero-cta { margin-top: 20px; }
+    .card-grid { grid-template-columns: 1fr; }
+    .card { padding: 22px; }
+    .chat-body { height: 320px; padding: 14px 20px 8px; }
+    .msg { max-width: 88%; }
+    .chat-header, .quick-questions { padding-left: 20px; padding-right: 20px; }
+    .chat-input-area { padding: 18px 20px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="avatar"><img src="assets/avatar.png" alt="梁兆彬的头像"></div>
+    <div class="hero-info">
+      <h1>梁兆彬</h1>
+      <p class="tagline">一个正在努力攀升的 <em>AI产品设计师</em></p>
+      <div class="hero-badges">
+        <span class="badge">产品设计师</span>
+        <span class="badge">UI / 体验设计</span>
+        <span class="badge">AI 工作流探索中</span>
+      </div>
+      <div class="hero-cta">
+        <a class="btn-primary" href="#chat">和数字分身聊聊 <span class="btn-arrow">→</span></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- About -->
+  <section id="about">
+    <div class="section-title">关于我</div>
+    <div class="card-grid">
+      <div class="card">
+        <h3>💼 我在做什么</h3>
+        <p>目前负责界面设计以及整理相关 UI 视觉规范，日常在 B 端监控类大屏与设计系统之间来回切换。</p>
+      </div>
+      <div class="card">
+        <h3>🚀 最近在学</h3>
+        <ul>
+          <li>Vibe Coding · 用 AI 把想法快速做成原型</li>
+          <li>产品工作流 · 从需求到落地的完整链路</li>
+          <li>B 端设计流 · 复杂系统的设计方法论</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🎯 关注方向</h3>
+        <p>体验设计 · 交互设计 · AI 工作流</p>
+        <div class="dot-row" style="margin-top:12px">
+          <span class="badge">体验设计</span>
+          <span class="badge">交互设计</span>
+          <span class="badge">AI 工作流</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>🎸 工作之外</h3>
+        <p>唱歌（据说是记忆点 ✨）、烹饪、看电影、玩游戏、折腾 AI 应用。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Works -->
+  <section id="works">
+    <div class="section-title">作品</div>
+    <div class="card-grid">
+      <div class="card">
+        <h3>配电网监控系统 · 智能告警模块</h3>
+        <p>面向 B 端监控大屏的告警模块 UI 设计，深色高密度信息布局，兼顾长时间值守场景下的可读性。</p>
+        <div class="dot-row" style="margin-top:14px">
+          <span class="badge">B 端大屏</span>
+          <span class="badge">深色主题</span>
+          <span class="badge">信息架构</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>告警类型层级分类体系</h3>
+        <p>把复杂告警归纳为故障 / 电网异常 / 设备异常 / 环境异常四类，让用户一眼判断优先级。</p>
+        <div class="dot-row" style="margin-top:14px">
+          <span class="badge">分类体系</span>
+          <span class="badge">体验设计</span>
+        </div>
+      </div>
+      <div class="card card-full">
+        <h3>团队 UI 视觉规范</h3>
+        <p>整理并维护团队的 UI 视觉规范与组件样式，保证多端、多页面之间的视觉一致性。</p>
+        <div class="dot-row" style="margin-top:14px">
+          <span class="badge">设计系统</span>
+          <span class="badge">视觉规范</span>
+          <span class="badge">多端一致性</span>
+        </div>
+      </div>
+    </div>
+    <p class="works-note">完整作品集还在整理中，想先看细节的话，欢迎直接找我聊。</p>
+  </section>
+
+  <!-- Digital Twin Chat -->
+  <section id="chat">
+    <div class="section-title">数字分身 · 来问我吧</div>
+    <div class="chat-card">
+      <div class="chat-header">
+        <div class="mini-avatar"><img src="assets/avatar.png" alt="数字分身头像"></div>
+        <div>
+          <div class="name">兆彬的数字分身</div>
+          <div class="sub"><span class="status-dot"></span>在线 · 由我本人调教</div>
+        </div>
+      </div>
+      <div class="chat-body" id="chatBody"></div>
+      <div class="quick-questions" id="quickQuestions"></div>
+      <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="输入问题，例如：你有哪些作品？" maxlength="100">
+        <button id="sendBtn">发送</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="section-title">联系方式</div>
+    <div class="card">
+      <div class="contact-list">
+        <div class="contact-item">
+          <div>
+            <div class="contact-label">邮箱</div>
+            <div class="contact-value">13726643121@qq.com</div>
+          </div>
+          <button class="btn-primary btn-sm" id="copyEmailBtn" data-value="13726643121@qq.com">复制邮箱 <span class="btn-arrow">→</span></button>
+        </div>
+        <div class="contact-item">
+          <div>
+            <div class="contact-label">微信</div>
+            <div class="contact-value">Neo_Lockon</div>
+          </div>
+          <button class="btn-primary btn-sm" id="copyWechatBtn" data-value="Neo_Lockon">复制微信 <span class="btn-arrow">→</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>梁兆彬 · 产品设计师 · 用 AI 把想法变成产品 © 2026</footer>
+</div>
+
+<script>
+  // ===== 数字分身说明书 =====
+  // 身份:梁兆彬(AI 产品设计师)的数字分身
+  // 任务:介绍我是谁 / 回答与我有关的问题 / 帮访客了解近况、作品、联系方式
+  // 语气:温文尔雅、彬彬有礼、简洁真诚、说人话、不装专家
+  // 边界:不编造未提供的经历;不假装知道未提供信息;不知道就明说并建议通过联系方式确认
+
+  // ===== 知识库(关键词匹配,命中第一条即返回) =====
+  const knowledge = [
+    {
+      keywords: ["你是谁", "谁呀", "介绍", "名字", "叫什么"],
+      answer: "您好,我是梁兆彬 👋\n一名 AI 产品设计师,目前在珠海许继电气有限公司担任 UI 设计岗位。\n简单讲,就是负责把产品的流程、交互和视觉一点点打磨顺的人。想了解哪方面,尽管问～"
+    },
+    {
+      keywords: ["最近", "在做什么", "近况", "忙着", "动态"],
+      answer: "工作上的话呢,我主要负责 G 端电网监测系统的数据大屏、操作界面和表单界面设计,并持续根据客户的实际需求做优化调整。\n空闲时间也没停下脚步,正在学习 AI 相关的 vibe coding 技术,希望借 AI 补上前后端的空白,让创意能不求人地落地出来 😄"
+    },
+    {
+      keywords: ["作品", "项目", "案例", "portfolio", "做过什么"],
+      answer: "比较有代表性的工作有这么几项：\n\n· 配电网监控系统智能告警模块的 UI 设计(深色监控大屏风格)\n· 告警类型的层级化分类体系(故障 / 电网异常 / 设备异常 / 环境异常)\n· 团队 UI 视觉规范的设计与整理\n\n更完整的作品集还在整理中,页面上方的「作品」区可以先看个概览～"
+    },
+    {
+      keywords: ["擅长", "能力", "会什么", "优势", "技能", "强项"],
+      answer: "比较擅长的主要有这几块：\n\n· 产品操作流程的优化设计\n· 交互设计、体验设计\n· 制定并维护 UI 视觉规范\n\n长期关注的则是：用户真正的痛点是什么,以及到底要做什么样的产品才能解决它。"
+    },
+    {
+      keywords: ["愿景", "职业规划", "发展", "目标", "未来", "规划", "想成为"],
+      answer: "我的职业生涯发展愿景嘛,是希望自己能把握住现阶段的 AI 风口,用 AI 的代码生成能力补全短板,让设计不再纸上谈兵。\n后续再一步步深入理解 B 端行业的业务,扎根成为行业专家,最终走向产品经理。\n愿望说出来就容易实现一点吧,希望能顺利～"
+    },
+    {
+      keywords: ["vibe", "coding", "ai", "工作流", "编程"],
+      answer: "最近在摸索 AI 工作流,尤其是 vibe coding。\n我关心的点比较实在：一个产品创意,怎么通过 AI 快速落地成能跑的东西,而不只是停在原型图。\n还在学习阶段,有想法的话欢迎一起交流～"
+    },
+    {
+      keywords: ["工作", "职责", "负责什么", "公司", "岗位", "上班"],
+      answer: "我现在在珠海许继电气有限公司担任 UI 设计岗位。\n主要做的是 G 端电网监测系统的数据大屏、操作界面、表单界面等界面设计,并持续根据客户的实际需求做优化调整。"
+    },
+    {
+      keywords: ["联系", "找你", "微信", "邮箱", "email", "邮件", "电话", "怎么找到", "联系方式"],
+      answer: "欢迎来找我聊：\n\n· 邮箱：13726643121@qq.com\n· 微信：Neo_Lockon\n\n页面下方「联系方式」区有按钮,可以直接发邮件。面试机会、项目合作,或者单纯聊聊 AI 工作流,都欢迎～"
+    },
+    {
+      keywords: ["兴趣", "爱好", "唱歌", "音乐", "平时做什么", "工作之外"],
+      answer: "工作之外我比较喜欢：唱歌(据朋友说还不错 🎤)、烹饪、看电影、玩游戏,还有折腾各种 AI 应用。\n做饭的时候也常哼歌,属于一边煲汤一边飙高音那种～"
+    },
+    {
+      keywords: ["流程优化", "体验设计", "交互设计", "视觉规范", "规范", "痛点", "需求"],
+      answer: "这块是我平时投入比较多的地方。\n流程优化比较理性,要顺着用户真实的动线去梳理；视觉规范则偏秩序,保证多人协作时多端一致。\n两边都不算炫技,但挺见功夫～"
+    }
+  ];
+
+  // ===== 答不上来时的兜底话术(明确说不知道 + 引导联系方式) =====
+  const fallback = "抱歉,这个我暂时答不上来 😅\n关于兆彬的信息,我只说他自己给过我的那些,不敢替他编。\n您可以把问题发到邮箱 13726643121@qq.com,或者加微信 Neo_Lockon,他本人会回答得更准确～";
+
+  // ===== 快捷问题 =====
+  const quicks = ["你是谁？", "最近在做什么？", "你的职业愿景是？", "怎么联系你？"];
+
+  const chatBody = document.getElementById("chatBody");
+  const chatInput = document.getElementById("chatInput");
+  const quickBox = document.getElementById("quickQuestions");
+  const sendBtn = document.getElementById("sendBtn");
+
+  function nowTime() {
+    const d = new Date();
+    return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+  }
+
+  function addMsg(role, text) {
+    const div = document.createElement("div");
+    div.className = "msg " + role;
+    div.innerHTML = '<div class="bubble"></div><div class="time">' + nowTime() + "</div>";
+    div.querySelector(".bubble").textContent = text;
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  function addTyping() {
+    const div = document.createElement("div");
+    div.className = "msg bot";
+    div.id = "typing";
+    div.innerHTML = '<div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  function findAnswer(q) {
+    const lower = q.toLowerCase();
+    for (const item of knowledge) {
+      if (item.keywords.some(k => lower.includes(k.toLowerCase()))) return item.answer;
+    }
+    return fallback;
+  }
+
+  function send(text) {
+    const q = (text || chatInput.value).trim();
+    if (!q) return;
+    chatInput.value = "";
+    addMsg("user", q);
+    addTyping();
+    const delay = 500 + Math.random() * 500;
+    setTimeout(() => {
+      document.getElementById("typing").remove();
+      addMsg("bot", findAnswer(q));
+    }, delay);
+  }
+
+  quicks.forEach(q => {
+    const btn = document.createElement("button");
+    btn.textContent = q;
+    btn.onclick = () => send(q);
+    quickBox.appendChild(btn);
+  });
+
+  sendBtn.onclick = () => send();
+  chatInput.addEventListener("keydown", e => { if (e.key === "Enter") send(); });
+
+  // 开场白
+  setTimeout(() => {
+    addMsg("bot", "您好,我是兆彬的数字分身 🤖\n他暂时不在线的时候,由我来接待您。\n可以点下面的快捷问题,也可以直接打字问我～");
+  }, 400);
+
+  // ===== 联系方式:复制邮箱 / 微信号 =====
+  function copyToClipboard(text) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  [["copyEmailBtn", "邮箱"], ["copyWechatBtn", "微信号"]].forEach(([id, label]) => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      const text = btn.dataset.value;
+      const arrow = btn.querySelector(".btn-arrow");
+      if (copyToClipboard(text)) {
+        arrow.textContent = "✓";
+        setTimeout(() => { arrow.textContent = "→"; }, 1800);
+      } else {
+        window.prompt("复制失败,请手动复制" + label + ":", text);
+      }
+    });
+  });
+</script>
+</body>
+</html>
